@@ -8,4 +8,15 @@ used packages - Nodemon, bodyParser, morgan
         npm install --save morgan
 
 Database - MongoDB Atlas - Database as service by MongoDB - free tire 
-    database name - node-rest-shop
+    database name - node-rest-shop 
+
+    or in this project i use mongoose package for better 
+        - mongooose works with schemas, and models
+
+            const mongoose = require("mongoose");
+            const productSchema = mongoose.Schema({
+            _id: mongoose.Types.ObjectId,
+            name: String,
+            price: Number,
+            });
+            module.exports = mongoose.model("Product", productSchema);
