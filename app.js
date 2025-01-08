@@ -1,12 +1,15 @@
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const app = express();
 
 // morgan will call next function api routes to log and doesn't
 //  return anything and node.js continues to work on next part 
 
 
-app.use(morgan('dev'));
+app.use(morgan('dev'));         // can be called middleware 
+app.use(bodyParser.urlencoded({extended:false})); // can be called middleware
+app.use(bodyParser.json());
 
 const productRoutes = require('./api/routes/products');
 
