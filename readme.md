@@ -2,10 +2,12 @@ used packages - Nodemon, bodyParser, morgan
     Nodemon - used for auto restarting the server
         npm install --save nodemon 
             package.json - add script as start: "nodemon server.js"
-    bodyParser- used for JSON response methods and functions
+    bodyParser- used for JSON response methods and json parsing 
         npm install --save bodyparser
     morgan - logging 
         npm install --save morgan
+    multer - multipart json parsing
+        npm install --save multer
 
 Database - MongoDB Atlas - Database as service by MongoDB - free tire 
     database name - node-rest-shop 

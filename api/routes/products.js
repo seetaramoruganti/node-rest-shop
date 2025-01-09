@@ -2,7 +2,8 @@ const express = require("express");
 
 const Product = require("../models/product");
 const { default: mongoose } = require("mongoose");
-
+const multer = require("multer");
+const upload = multer({ dest: "upload/" });
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -32,7 +33,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", upload.single("productImage"), (req, res, next) => {
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -69,7 +70,15 @@ router.get("/:productId", (req, res, next) => {
     .then((doc) => {
       console.log("From Database", doc);
       if (doc) {
-        res.status(200).json(doc);
+        res.status(200).json({
+          id: doc._id,
+          name: doc.name,
+          price: doc.price,
+          result: {
+            type: "GET",
+            url: "http://localhost:3000/products" + id,
+          },
+        });
       } else {
         res
           .status(404)
@@ -82,17 +91,28 @@ router.get("/:productId", (req, res, next) => {
     });
 });
 
+// here the request body should be an array [{"propName":"name","value":"12.99" }]
 router.patch("/:productId", (req, res, next) => {
   const id = req.params.productId;
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  Product.update({ _id: id }, { $set: updateOps })
+
+  Product.findByIdAndUpdate({ _id: id }, { $set: updateOps })
     .exec()
     .then((result) => {
       console.log(result);
-      res.status(200).json(result);
+      res.status(200).json({
+        message: "Product Updated Successfully ! ",
+        id: result._id,
+        name: result.name,
+        price: result.price,
+        request: {
+          type: "PATCH",
+          url: "http://localhost:3000/products" + id,
+        },
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -107,7 +127,12 @@ router.delete("/:productId", (req, res, next) => {
   Product.findByIdAndDelete(id)
     .exec()
     .then((result) => {
-      res.status(200).json({ result });
+      res.status(200).json({
+        message: "Product Deleted !",
+        type: "POST",
+        url: "http://localhost:3000/products",
+        syntax: { name: "Product_name", price: "value" },
+      });
     })
     .catch((err) => {
       console.log(err);

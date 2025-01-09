@@ -20,6 +20,8 @@ mongoose
   .then(() => console.log("MongoDB connected successfully!"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+mongoose.Promise = global.Promise;
+
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
 
