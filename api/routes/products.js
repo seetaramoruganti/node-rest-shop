@@ -41,10 +41,17 @@ router.post("/", (req, res, next) => {
   product
     .save()
     .then((result) => {
-      console.log(result);
+      // console.log(result);
       res.status(201).json({
-        message: "Handling POST requests to /products",
-        createdProduct: result,
+        message: "Created Products Successfully !",
+        createdProduct: {
+          name: result.name,
+          price: result.price,
+          request: {
+            type: "GET",
+            url: "http://localhost:3000/products" + result._id,
+          },
+        },
       });
     })
     .catch((err) => {
